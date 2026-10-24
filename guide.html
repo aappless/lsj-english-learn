@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LSJ English 使用教學</title>
+<style>
+  :root {
+    --bg: #0a1730; --panel: #0f2445; --panel2: #132d55; --line: #1f3d6b;
+    --text: #e8eef8; --muted: #9fb1cf; --accent: #2dd4bf; --amber: #fbbf24; --red: #ef4444;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 17px/1.75 "Segoe UI", "Microsoft JhengHei", "PingFang TC", system-ui, sans-serif;
+  }
+  header {
+    position: sticky; top: 0; z-index: 5; display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+    padding: 10px 16px; background: rgba(10, 23, 48, .94); border-bottom: 1px solid var(--line);
+  }
+  header b { color: var(--accent); }
+  header a { margin-left: auto; }
+  a { color: var(--accent); }
+  .btn {
+    display: inline-block; text-decoration: none; color: var(--text); background: var(--panel2);
+    border: 1px solid var(--line); border-radius: 8px; padding: 4px 12px; font-size: 15px;
+  }
+  main { max-width: 920px; margin: 0 auto; padding: 20px 16px 80px; }
+  h1 { font-size: 28px; margin: 6px 0 4px; }
+  h2 { font-size: 23px; margin: 44px 0 6px; padding-top: 14px; border-top: 2px solid var(--line); scroll-margin-top: 64px; }
+  .lead { color: var(--muted); margin: 0 0 18px; }
+  .toc { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .toc a {
+    display: block; text-decoration: none; color: var(--text); background: var(--panel);
+    border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px;
+  }
+  .toc a:hover { border-color: var(--accent); }
+  .toc small { display: block; color: var(--muted); }
+  .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 14px 0 6px; font-size: 14px; }
+  .flow span { background: var(--panel2); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; }
+  .flow i { color: var(--muted); font-style: normal; }
+  .step { display: flex; gap: 14px; margin: 26px 0; }
+  .num {
+    flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #062a26;
+    font-weight: 800; font-size: 18px; display: flex; align-items: center; justify-content: center;
+  }
+  .step > div:last-child { flex: 1; min-width: 0; }
+  .step h3 { margin: 4px 0 6px; font-size: 20px; }
+  .step p { margin: 6px 0; }
+  figure { margin: 12px 0; }
+  figure img { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 10px; }
+  figcaption { color: var(--muted); font-size: 14px; margin-top: 6px; }
+  code { background: var(--panel2); padding: 1px 6px; border-radius: 4px; font-size: 15px; overflow-wrap: anywhere; }
+  pre {
+    background: #071226; border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px;
+    font-size: 13px; line-height: 1.6; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywhere;
+  }
+  .tip, .warn { border-left: 4px solid; border-radius: 8px; padding: 10px 14px; margin: 12px 0; background: var(--panel); }
+  .tip { border-color: var(--accent); }
+  .warn { border-color: var(--amber); }
+  .done { background: linear-gradient(135deg, #0f3a3a, #0f2445); border: 1px solid var(--accent); border-radius: 14px; padding: 16px 20px; overflow-wrap: anywhere; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0; background: var(--panel); }
+  th, td { border: 1px solid var(--line); padding: 8px 12px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+  th { background: var(--panel2); }
+  kbd { background: var(--panel2); border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 6px; padding: 0 7px; font-size: 14px; }
+  .two { display: grid; grid-template-columns: 1fr 300px; gap: 20px; align-items: start; }
+  @media (max-width: 680px) {
+    body { font-size: 16px; }
+    .toc, .two { grid-template-columns: 1fr; }
+    .num { width: 32px; height: 32px; font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <b>LSJ English</b><span>使用教學</span>
+  <a class="btn" href="./">← 回到課程</a>
+</header>
+
+<main>
+  <h1>📖 使用教學</h1>
+  <p class="lead">選一個你要看的部分：</p>
+  <nav class="toc">
+    <a href="#make">🛠 製作一課教學影片<small>老師用：從 YouTube 網址到放上網站，共 9 步</small></a>
+    <a href="#watch">🎧 看課程、學英文<small>學生用：字幕、片語卡片、單句練習</small></a>
+  </nav>
+
+  <!-- ═══════════════ 製作 ═══════════════ -->
+  <h2 id="make">🛠 製作一課教學影片</h2>
+  <p class="lead">在<b>你自己的電腦</b>上操作。不需要 API 金鑰，也不用打任何指令。</p>
+  <div class="flow">
+    <span>1 開啟本機版</span><i>→</i><span>2 貼網址</span><i>→</i><span>3 製作字幕</span><i>→</i>
+    <span>4 複製提示詞</span><i>→</i><span>5 問 AI</span><i>→</i><span>6 匯入卡片</span><i>→</i>
+    <span>7 檢查</span><i>→</i><span>8 上傳</span><i>→</i><span>9 完成 🎉</span>
+  </div>
+
+  <div class="step"><div class="num">1</div><div>
+    <h3>開啟本機版</h3>
+    <p>到 <code>C:\AI\LSJ_ENGLISH-LEARN</code> 資料夾，<b>雙擊 <code>start.bat</code></b>。</p>
+    <p>會出現一個黑色視窗，瀏覽器也會自動打開網站。<b>使用時不要關掉黑色視窗</b>，關掉網站就停了。</p>
+    <p>在網頁上往下捲，影片和按鈕的下方就是 <b>🛠 課程製作室</b>：</p>
+    <figure><img src="guide/step1_studio.png" alt="課程製作室在影片下方"></figure>
+    <div class="warn">⚠ 課程製作室<b>只有用 start.bat 開的本機版才有</b>。在網路上的網站看不到，這是正常的。</div>
+  </div></div>
+
+  <div class="step"><div class="num">2</div><div>
+    <h3>貼上 YouTube 網址（B）</h3>
+    <p>在 YouTube 打開想教的影片，複製瀏覽器上方的網址，貼到 <b>B</b> 的框框裡。</p>
+    <figure><img src="guide/step2_url.png" alt="貼上 YouTube 網址"></figure>
+    <div class="tip">💡 影片要有<b>英文 CC 字幕</b>：在 YouTube 播放器右下角看得到 <kbd>CC</kbd> 按鈕的影片才行。TED 演講幾乎都有。</div>
+  </div></div>
+
+  <div class="step"><div class="num">3</div><div>
+    <h3>製作字幕（C）</h3>
+    <p>按 <b>🛠 製作字幕</b>，等 10～30 秒。</p>
+    <figure><img src="guide/step3_make.png" alt="按製作字幕"></figure>
+    <p>畫面下方出現這個訊息，新課程就會自動出現在最上方的選單，並開始播放：</p>
+    <figure><img src="guide/step3_done.png" alt="字幕做好了" style="width:min(100%, 520px)"></figure>
+    <p>到這裡，影片已經有<b>中英字幕</b>了。想加上片語、單字卡片，繼續第 4 步；不想加，直接跳到第 8 步。</p>
+  </div></div>
+
+  <div class="step"><div class="num">4</div><div>
+    <h3>複製提示詞（D1）</h3>
+    <p>在 <b>範圍</b> 選要處理的句子（一次 50 句），按 <b>📋 複製提示詞</b>。</p>
+    <figure><img src="guide/step4_copy.png" alt="選範圍、按複製提示詞"></figure>
+    <p>想讓卡片簡單一點或難一點，可以先改 <b>程度</b>，例如「國中」「多益 700」。</p>
+  </div></div>
+
+  <div class="step"><div class="num">5</div><div>
+    <h3>交給 AI（Claude 或 ChatGPT）</h3>
+    <ol>
+      <li>打開 <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a> 或 <a href="https://chatgpt.com" target="_blank" rel="noopener">chatgpt.com</a>，開一個<b>新對話</b>。</li>
+      <li>在輸入框按 <kbd>Ctrl</kbd> + <kbd>V</kbd> 貼上，送出。</li>
+      <li>等 AI 回答完，按回答下方的 <b>複製</b> 按鈕，把整段回答複製起來。</li>
+    </ol>
+    <p>AI 的回答大概長這樣（前後有說明文字也沒關係）：</p>
+<pre>好的，以下是卡片：
+```json
+{"cards":[{"i":1,"type":"chunk","match":"blown away","zhMatch":"震驚",
+  "title":"be blown away","meaning":"大受震撼、驚豔不已", ...}]}
+```</pre>
+    <div class="tip">💡 用平常聊天的帳號就可以，<b>不需要 API 金鑰</b>。</div>
+  </div></div>
+
+  <div class="step"><div class="num">6</div><div>
+    <h3>匯入卡片（D2）</h3>
+    <p>回到課程製作室，把 AI 的回答貼到 <b>D2</b> 的大框框，按 <b>📥 匯入卡片</b>。</p>
+    <figure><img src="guide/step6_import.png" alt="貼上 AI 的回答並匯入"></figure>
+    <p>看到綠色的「✅ 匯入 … 張卡片」就成功了，卡片會自動存起來。</p>
+    <div class="tip">💡 句子超過 50 句時：<b>回到第 4 步換下一個範圍</b>，重複 4 → 5 → 6，直到每個範圍都做完。範圍選單會顯示每段「已有幾張卡片」。</div>
+    <div class="tip">💡 AI 的回答存成了檔案？按 <b>📂 從檔案匯入</b> 選那個檔案即可。</div>
+  </div></div>
+
+  <div class="step"><div class="num">7</div><div>
+    <h3>檢查成果</h3>
+    <p>按播放看看：字幕有沒有跟著跑、片語有沒有高亮、下方有沒有出現卡片。</p>
+    <figure><img src="guide/overview.png" alt="做好的課程畫面"></figure>
+  </div></div>
+
+  <div class="step"><div class="num">8</div><div>
+    <h3>上傳到網站（Git 小幫手）</h3>
+    <p>雙擊 <code>C:\AI\lsj_git\GitTool.bat</code> 打開 Git 小幫手，在說明欄寫「新增課程：影片名稱」，按 <b>💾⬆ 存檔並上傳</b>。</p>
+    <figure><img src="guide/step8_git.png" alt="Git 小幫手按存檔並上傳"></figure>
+    <p>看到「✅ 已上傳到 GitHub」就完成了。Git 小幫手的詳細用法見 <code>C:\AI\lsj_git\教學.html</code>。</p>
+  </div></div>
+
+  <div class="step"><div class="num">9</div><div>
+    <h3>完成 🎉</h3>
+    <div class="done">
+      等 1～2 分鐘，打開網站：<br>
+      <a href="https://aappless.github.io/lsj-english-learn/" target="_blank" rel="noopener"><b>https://aappless.github.io/lsj-english-learn/</b></a><br>
+      在最上方選單選新課程，你的英文教學影片就上線了！把網址分享給學生就能用。
+    </div>
+    <p style="color:var(--muted);font-size:15px">沒看到新課程？按 <kbd>Ctrl</kbd> + <kbd>F5</kbd> 強制重新整理。</p>
+  </div></div>
+
+  <!-- ═══════════════ 觀看 ═══════════════ -->
+  <h2 id="watch">🎧 看課程、學英文</h2>
+  <p class="lead">電腦、手機都可以用。</p>
+
+  <div class="step"><div class="num">1</div><div>
+    <h3>選課程</h3>
+    <p>點最上方的 <b>課程選單</b>，選一課，影片就會載入。</p>
+    <figure><img src="guide/topbar.png" alt="上方的課程選單"></figure>
+  </div></div>
+
+  <div class="step"><div class="num">2</div><div>
+    <h3>看影片、跟著字幕</h3>
+    <p>播放時，影片下方會同步顯示<b>英文</b>和<b>中文</b>字幕。</p>
+    <p><b>有底線、有顏色的字是重點片語</b>，點一下就會在下方顯示說明卡片。</p>
+    <figure><img src="guide/stage.png" alt="影片與同步字幕"></figure>
+    <table>
+      <tr><th>顏色</th><th>種類</th></tr>
+      <tr><td style="color:#2dd4bf">青綠色</td><td>詞塊／慣用語（chunk）</td></tr>
+      <tr><td style="color:#fbbf24">黃色</td><td>句型（pattern）</td></tr>
+      <tr><td style="color:#a78bfa">紫色</td><td>文法（grammar）</td></tr>
+      <tr><td style="color:#60a5fa">藍色</td><td>單字（word）</td></tr>
+    </table>
+  </div></div>
+
+  <div class="step"><div class="num">3</div><div>
+    <h3>讀片語卡片</h3>
+    <p>卡片有中文意思、用法說明和另一個例句。右上角的 <b>01 / 03</b> 表示第幾張／共幾張。</p>
+    <p>按 <b>‹ 上一個／下一個 ›</b> 可以逐張複習，影片會跳到那張卡片的句子。</p>
+    <figure><img src="guide/card.png" alt="片語卡片"></figure>
+  </div></div>
+
+  <div class="step"><div class="num">4</div><div>
+    <h3>練聽力的按鈕</h3>
+    <figure><img src="guide/controls.png" alt="播放控制按鈕"></figure>
+    <table>
+      <tr><th>按鈕</th><th>功能</th><th>快捷鍵</th></tr>
+      <tr><td>⏮ 上一句</td><td>回到這句開頭；再按一次到上一句</td><td><kbd>←</kbd></td></tr>
+      <tr><td>▶ 播放／⏸ 暫停</td><td>播放或暫停</td><td><kbd>空白鍵</kbd></td></tr>
+      <tr><td>下一句 ⏭</td><td>跳到下一句</td><td><kbd>→</kbd></td></tr>
+      <tr><td>🔁 單句循環</td><td>同一句一直重複，練聽力、跟讀最好用</td><td><kbd>R</kbd></td></tr>
+      <tr><td>⏸ 逐句暫停</td><td>每句播完自動停下，給你時間跟著念</td><td><kbd>P</kbd></td></tr>
+      <tr><td>速度</td><td>0.5～1.5 倍速，聽不清楚就放慢</td><td></td></tr>
+    </table>
+  </div></div>
+
+  <div class="step"><div class="num">5</div><div>
+    <h3>全文逐字稿</h3>
+    <p>最下方列出整部影片的每一句。<b>點任何一句，影片就跳到那裡播放</b>；正在播的句子會反白。</p>
+    <figure><img src="guide/transcript.png" alt="全文逐字稿"></figure>
+  </div></div>
+
+  <div class="step"><div class="num">6</div><div>
+    <div class="two">
+      <div>
+        <h3>用手機看</h3>
+        <p>用手機瀏覽器打開網址就能看，畫面會自動調整。</p>
+        <p>建議：按瀏覽器選單的<b>「加到主畫面」</b>，以後像 App 一樣一點就開。</p>
+      </div>
+      <figure><img src="guide/mobile.png" alt="手機畫面"></figure>
+    </div>
+  </div></div>
+
+  <p style="text-align:center;margin-top:40px"><a class="btn" href="./">← 回到課程</a></p>
+</main>
+</body>
+</html>
