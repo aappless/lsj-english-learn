@@ -31,6 +31,7 @@ const TAGS = {
 const state = {
   lesson: null,
   lessonFile: null, // 從選單開的課程檔名（lessons/ 底下），匯入卡片時存回這個檔
+  local: false,     // 用 start.bat 開的本機版（有課程製作室）
   lines: [],
   notes: [],        // 全課程的重點，攤平成一個陣列
   lineIdx: -1,
@@ -257,8 +258,10 @@ async function checkLocalTools() {
     const res = await fetch('api/status', { cache: 'no-store' });
     if (!res.ok) return;    // GitHub Pages 上沒有這個功能，按鈕維持隱藏
     const st = await res.json();
+    state.local = !!st.local;
     els.studio.hidden = !st.local;
     els.cardsOpt.hidden = !st.hasKey;
+    renderSubtitle();
   } catch { /* 不是本機版 */ }
 }
 
@@ -504,6 +507,13 @@ async function loadLessonUrl(url) {
 /* ---------- 畫面 ---------- */
 
 function renderSubtitle() {
+  if (state.lesson && !state.lines.length) {
+    els.subEn.textContent = '這支影片還沒有字幕';
+    els.subZh.textContent = state.local
+      ? '往下捲到「🛠 課程製作室」，按 C「製作字幕」'
+      : '要先在本機版做成課程，才會有中英字幕';
+    return;
+  }
   const ln = state.lines[state.lineIdx];
   els.subEn.innerHTML = ln ? highlight(ln.en, ln._notes, 'match') : '';
   els.subZh.innerHTML = ln ? highlight(ln.zh, ln._notes, 'zhMatch') : '';
@@ -672,10 +682,33 @@ function setAutoPause(on) {
 
 /* ---------- 事件 ---------- */
 
+// 換一支 YouTube 影片：已做成課程就切到那一課；還沒做過就清掉舊字幕，提示去製作
+function openYouTube(id) {
+  const file = id + '.json';
+  if ([...els.lessonSelect.options].some(o => o.value === file)) {
+    els.lessonSelect.value = file;
+    loadLessonUrl('lessons/' + file);
+    return;
+  }
+  if ((state.lesson?.source?.id || '') !== id) {
+    setLesson({ title: '這支影片還沒有字幕（還沒做成課程）', lines: [] });
+    state.lessonFile = null;
+    els.lessonSelect.selectedIndex = -1;
+    if (state.local) {
+      els.studioUrl.value = 'https://www.youtube.com/watch?v=' + id;
+      els.studio.open = true;
+    }
+    toast(state.local
+      ? '這支影片還沒有字幕。往下捲到「🛠 課程製作室」，按 C「製作字幕」'
+      : '這支影片還沒有做成課程，所以沒有字幕', 8000);
+  }
+  loadYouTube(id);
+}
+
 els.ytLoadBtn.addEventListener('click', () => {
   const id = parseYouTubeId(els.ytInput.value);
   if (!id) { toast('看不懂這個 YouTube 網址，請貼完整網址或 11 碼影片 ID'); return; }
-  loadYouTube(id);
+  openYouTube(id);
 });
 els.ytInput.addEventListener('keydown', e => { if (e.key === 'Enter') els.ytLoadBtn.click(); });
 els.makeBtn.addEventListener('click', makeLesson);
@@ -683,7 +716,7 @@ els.previewBtn.addEventListener('click', () => {
   const id = parseYouTubeId(els.studioUrl.value);
   if (!id) { toast('看不懂這個 YouTube 網址，請貼完整網址'); return; }
   els.ytInput.value = id;
-  loadYouTube(id);
+  openYouTube(id);
 });
 els.copyPromptBtn.addEventListener('click', async () => {
   if (!needLesson()) return;
