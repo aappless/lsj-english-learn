@@ -14,7 +14,11 @@
     <button id="openLessonBtn" title="開啟課程 JSON 檔">📂 課程 JSON</button>
     <input type="file" id="lessonFile" accept=".json,application/json" hidden>
     <input id="ytInput" placeholder="貼上 YouTube 網址或影片 ID">
-    <button id="ytLoadBtn">▶ 載入 YT</button>
+    <button id="ytLoadBtn" title="只播放影片，不會產生字幕">▶ 載入 YT</button>
+    <button id="makeBtn" class="make-btn" title="抓這支影片的字幕，做成新課程（只有本機版才有）" hidden>🛠 製作課程</button>
+    <label id="cardsOpt" class="cards-opt" title="需要 Anthropic API 金鑰，會花費 API 費用" hidden>
+      <input type="checkbox" id="cardsCheck"> 同時用 Claude 做卡片
+    </label>
     <button id="localBtn">🎞 本機影片</button>
     <input type="file" id="localFile" accept="video/*,audio/*" hidden>
   </div>

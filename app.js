@@ -4,6 +4,7 @@ const $ = id => document.getElementById(id);
 const els = {
   lessonSelect: $('lessonSelect'), openLessonBtn: $('openLessonBtn'), lessonFile: $('lessonFile'),
   ytInput: $('ytInput'), ytLoadBtn: $('ytLoadBtn'), localBtn: $('localBtn'), localFile: $('localFile'),
+  makeBtn: $('makeBtn'), cardsOpt: $('cardsOpt'), cardsCheck: $('cardsCheck'),
   lessonTitle: $('lessonTitle'), ytWrap: $('ytWrap'), video: $('localVideo'), placeholder: $('placeholder'),
   subEn: $('subEn'), subZh: $('subZh'),
   prevLineBtn: $('prevLineBtn'), playBtn: $('playBtn'), nextLineBtn: $('nextLineBtn'),
@@ -228,7 +229,7 @@ function setLesson(lesson) {
   }
 }
 
-async function loadLessonIndex() {
+async function loadLessonIndex(selectFile) {
   if (isFileProtocol) {
     els.lessonSelect.hidden = true;
     return;
@@ -238,9 +239,57 @@ async function loadLessonIndex() {
     const list = await res.json();
     els.lessonSelect.innerHTML = list.map(it =>
       `<option value="${esc(it.file)}">${esc(it.title || it.file)}</option>`).join('');
-    if (list.length) await loadLessonUrl('lessons/' + list[0].file);
+    const pick = list.find(it => it.file === selectFile) || list[0];
+    if (pick) {
+      els.lessonSelect.value = pick.file;
+      await loadLessonUrl('lessons/' + pick.file);
+    }
   } catch {
     els.lessonSelect.hidden = true;
+  }
+}
+
+/* ---------- 製作課程（只有用 start.bat 開的本機版才有） ---------- */
+
+async function checkLocalTools() {
+  if (isFileProtocol) return;
+  try {
+    const res = await fetch('api/status', { cache: 'no-store' });
+    if (!res.ok) return;    // GitHub Pages 上沒有這個功能，按鈕維持隱藏
+    const st = await res.json();
+    els.makeBtn.hidden = !st.local;
+    els.cardsOpt.hidden = !st.hasKey;
+  } catch { /* 不是本機版 */ }
+}
+
+async function makeLesson() {
+  const id = parseYouTubeId(els.ytInput.value);
+  if (!id) { toast('請先在左邊貼上 YouTube 網址'); return; }
+  const file = id + '.json';
+  if ([...els.lessonSelect.options].some(o => o.value === file) &&
+      !confirm('這支影片已經有課程了。\n重新製作會覆蓋原本的內容（包含卡片），確定嗎？')) return;
+  const cards = !els.cardsOpt.hidden && els.cardsCheck.checked;
+
+  els.makeBtn.disabled = true;
+  els.makeBtn.textContent = '⏳ 製作中…';
+  toast(cards ? '正在抓字幕並請 Claude 做卡片，可能要幾分鐘，請稍候…' : '正在抓 YouTube 字幕，大約 10～30 秒…', 600000);
+  try {
+    const res = await fetch('api/make', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: els.ytInput.value, cards }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || '製作失敗');
+    await loadLessonIndex(data.file);
+    toast(data.cardsError
+      ? '字幕做好了，但卡片失敗：' + data.cardsError
+      : '✅ 課程做好了！確認沒問題後，用 Git 小幫手「存檔並上傳」，網站上就會出現這一課', 10000);
+  } catch (err) {
+    toast('製作失敗：' + err.message, 12000);
+  } finally {
+    els.makeBtn.disabled = false;
+    els.makeBtn.textContent = '🛠 製作課程';
   }
 }
 
@@ -430,6 +479,7 @@ els.ytLoadBtn.addEventListener('click', () => {
   loadYouTube(id);
 });
 els.ytInput.addEventListener('keydown', e => { if (e.key === 'Enter') els.ytLoadBtn.click(); });
+els.makeBtn.addEventListener('click', makeLesson);
 
 els.localBtn.addEventListener('click', () => els.localFile.click());
 els.localFile.addEventListener('change', () => {
@@ -493,3 +543,4 @@ document.addEventListener('keydown', e => {
 
 showStage('none');
 loadLessonIndex();
+checkLocalTools();
