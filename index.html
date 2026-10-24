@@ -15,10 +15,6 @@
     <input type="file" id="lessonFile" accept=".json,application/json" hidden>
     <input id="ytInput" placeholder="貼上 YouTube 網址或影片 ID">
     <button id="ytLoadBtn" title="只播放影片，不會產生字幕">▶ 載入 YT</button>
-    <button id="makeBtn" class="make-btn" title="抓這支影片的字幕，做成新課程（只有本機版才有）" hidden>🛠 製作課程</button>
-    <label id="cardsOpt" class="cards-opt" title="需要 Anthropic API 金鑰，會花費 API 費用" hidden>
-      <input type="checkbox" id="cardsCheck"> 同時用 Claude 做卡片
-    </label>
     <button id="localBtn">🎞 本機影片</button>
     <input type="file" id="localFile" accept="video/*,audio/*" hidden>
   </div>
@@ -69,6 +65,64 @@
       <button id="nextNoteBtn" title="下一個重點">下一個 ›</button>
     </div>
   </section>
+
+  <details id="studio" class="tools" open hidden>
+    <summary>🛠 課程製作室（只有本機版才有，網站上不會出現）</summary>
+    <div class="tools-body">
+
+      <div class="step">
+        <h3><span class="badge">A</span> 加入課程</h3>
+        <p class="hint">目前課程：<b id="currentLesson">（無）</b></p>
+        <p class="hint">要做<b>新課程</b>：從 B 開始。要幫<b>已有的課程</b>加片語單字：在最上方選單選好課程，直接跳到 D。</p>
+      </div>
+
+      <div class="step">
+        <h3><span class="badge">B</span> 設定 YouTube 網址</h3>
+        <div class="row">
+          <input id="studioUrl" class="grow" placeholder="貼上 YouTube 網址（影片要有英文 CC 字幕）">
+          <button id="previewBtn" title="先播放看看是不是這支影片">▶ 先播放看看</button>
+        </div>
+      </div>
+
+      <div class="step">
+        <h3><span class="badge">C</span> 製作字幕</h3>
+        <div class="row">
+          <button id="makeBtn" class="make-btn">🛠 製作字幕</button>
+          <label id="cardsOpt" class="cards-opt" title="需要 Anthropic API 金鑰，會花費 API 費用" hidden>
+            <input type="checkbox" id="cardsCheck"> 同時用 Claude 做卡片
+          </label>
+        </div>
+        <p class="hint">會抓 YouTube 的英文與中文字幕做成課程，自動加進最上方的選單（約 10～30 秒）。</p>
+      </div>
+
+      <div class="step">
+        <h3><span class="badge">D</span> 片語、單字卡片（用 Claude 或 ChatGPT，不需要金鑰）</h3>
+        <p class="sub">D1. 把句子交給 AI</p>
+        <div class="row">
+          <label>範圍 <select id="batchSelect"></select></label>
+          <label>程度 <input id="levelInput" value="台灣高中到大學程度"></label>
+        </div>
+        <div class="row">
+          <button id="copyPromptBtn">📋 複製提示詞</button>
+          <button id="dlPromptBtn">⬇ 下載提示詞</button>
+          <a class="link-btn" href="docs/卡片格式說明.md" download="卡片格式說明.md">⬇ 下載格式說明</a>
+        </div>
+        <p class="hint">把提示詞貼到 Claude（claude.ai）或 ChatGPT 送出，它會回覆一段 JSON。每次 50 句，做完再換下一個範圍。</p>
+
+        <p class="sub">D2. 把 AI 的回答放回來</p>
+        <textarea id="cardsInput" rows="6" placeholder="把 AI 的回答整段貼在這裡（前後有說明文字也沒關係）"></textarea>
+        <div class="row">
+          <button id="importBtn" class="make-btn">📥 匯入卡片</button>
+          <button id="uploadCardsBtn">📂 從檔案匯入</button>
+          <input type="file" id="cardsFile" accept=".json,.txt,.md,application/json,text/plain" hidden>
+          <label class="cards-opt"><input type="checkbox" id="replaceCheck"> 取代這些句子原有的卡片</label>
+        </div>
+        <p id="importResult" class="hint"></p>
+      </div>
+
+      <p class="hint done">✅ 都做好後：打開 Git 小幫手按「💾⬆ 存檔並上傳」，1～2 分鐘後網站就會出現。</p>
+    </div>
+  </details>
 
   <details class="transcript" open>
     <summary>全文逐字稿（點句子可跳轉）</summary>

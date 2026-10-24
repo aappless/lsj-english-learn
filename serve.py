@@ -2,12 +2,13 @@
 
 用伺服器開啟（而不是雙擊 index.html）YouTube 才能嵌入播放；
 另外支援 HTTP Range，讓 videos/ 裡的本機影片可以拖曳進度。
-網頁上的「製作課程」按鈕也靠這裡執行 tools/ 裡的工具（只有本機版有）。
+網頁上的「製作課程」「匯入卡片」也靠這裡執行工具、存檔（只有本機版有）。
 """
 import http.server
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import threading
@@ -53,7 +54,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         return super().do_GET()
 
     def do_POST(self):
-        if self.path != '/api/make':
+        handler = {'/api/make': self.api_make, '/api/save-lesson': self.api_save_lesson}.get(self.path)
+        if not handler:
             return self.send_json({'error': '找不到這個功能'}, 404)
         # 只接受 JSON：其他網站無法在沒有預檢的情況下送這種請求，避免被別的網頁亂呼叫
         if self.headers.get('Content-Type', '').split(';')[0].strip() != 'application/json':
@@ -62,6 +64,28 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             req = json.loads(self.rfile.read(int(self.headers.get('Content-Length') or 0)) or b'{}')
         except ValueError:
             return self.send_json({'error': '格式錯誤'}, 400)
+        handler(req)
+
+    def api_save_lesson(self, req):
+        """把網頁上改好的課程（例如匯入的卡片）存回 lessons/。第一次會先備份成 .bak。"""
+        name, lesson = str(req.get('file') or ''), req.get('lesson')
+        if not re.fullmatch(r'[\w.-]+\.json', name) or name == 'index.json':
+            return self.send_json({'error': '課程檔名不正確'}, 400)
+        if not isinstance(lesson, dict) or not isinstance(lesson.get('lines'), list):
+            return self.send_json({'error': '課程內容格式不正確'}, 400)
+        path = os.path.join(ROOT, 'lessons', name)
+        if not os.path.isfile(path):
+            return self.send_json({'error': f'找不到 lessons/{name}'}, 404)
+        if not os.path.exists(path + '.bak'):
+            shutil.copyfile(path, path + '.bak')
+        tmp = path + '.tmp'
+        with open(tmp, 'w', encoding='utf-8') as f:
+            json.dump(lesson, f, ensure_ascii=False, indent=2)
+            f.write('\n')
+        os.replace(tmp, path)
+        self.send_json({'ok': True})
+
+    def api_make(self, req):
         m = YT_ID.search(str(req.get('url') or '').strip())
         if not m:
             return self.send_json({'error': '看不懂這個 YouTube 網址'}, 400)
