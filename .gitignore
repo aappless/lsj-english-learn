@@ -1,0 +1,10 @@
+# 備份與暫存
+*.bak
+*.tmp
+__pycache__/
+
+# 本機影片（檔案大、可能有版權問題）
+videos/
+
+# Claude Code 本機設定
+.claude/

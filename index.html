@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LSJ English Learn</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">LSJ English</div>
+  <div class="source-bar">
+    <select id="lessonSelect" title="課程"></select>
+    <button id="openLessonBtn" title="開啟課程 JSON 檔">📂 課程 JSON</button>
+    <input type="file" id="lessonFile" accept=".json,application/json" hidden>
+    <input id="ytInput" placeholder="貼上 YouTube 網址或影片 ID">
+    <button id="ytLoadBtn">▶ 載入 YT</button>
+    <button id="localBtn">🎞 本機影片</button>
+    <input type="file" id="localFile" accept="video/*,audio/*" hidden>
+  </div>
+</header>
+
+<main>
+  <h1 id="lessonTitle">尚未載入課程</h1>
+
+  <section class="stage">
+    <div class="video-box">
+      <div id="ytWrap" class="yt-wrap" hidden></div>
+      <video id="localVideo" playsinline controls hidden></video>
+      <div id="placeholder" class="placeholder">請在上方選擇影片來源：<br>貼上 YouTube 網址，或按「本機影片」選擇檔案</div>
+    </div>
+    <div class="subtitle">
+      <p id="subEn" class="en"></p>
+      <p id="subZh" class="zh"></p>
+    </div>
+  </section>
+
+  <section class="controls">
+    <button id="prevLineBtn" title="上一句（←）">⏮ 上一句</button>
+    <button id="playBtn" title="播放／暫停（空白鍵）">▶ 播放</button>
+    <button id="nextLineBtn" title="下一句（→）">下一句 ⏭</button>
+    <button id="loopBtn" class="toggle" title="單句循環（R）">🔁 單句循環</button>
+    <button id="autoPauseBtn" class="toggle" title="每句播完自動暫停（P）">⏸ 逐句暫停</button>
+    <label class="rate">速度
+      <select id="rateSelect">
+        <option>0.5</option><option>0.75</option><option selected>1</option><option>1.25</option><option>1.5</option>
+      </select>
+    </label>
+  </section>
+
+  <section id="card" class="card" hidden>
+    <div class="card-head">
+      <span id="cardTag" class="tag"></span>
+      <span id="cardCounter" class="counter"></span>
+    </div>
+    <h2 id="cardTitle"></h2>
+    <p id="cardMeaning" class="meaning"></p>
+    <p id="cardExplain" class="explain"></p>
+    <div id="cardExample" class="example">
+      <p id="cardExEn" class="ex-en"></p>
+      <p id="cardExZh" class="ex-zh"></p>
+    </div>
+    <div class="card-nav">
+      <button id="prevNoteBtn" title="上一個重點">‹ 上一個</button>
+      <button id="nextNoteBtn" title="下一個重點">下一個 ›</button>
+    </div>
+  </section>
+
+  <details class="transcript" open>
+    <summary>全文逐字稿（點句子可跳轉）</summary>
+    <ol id="lineList"></ol>
+  </details>
+</main>
+
+<div id="toast" class="toast" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>

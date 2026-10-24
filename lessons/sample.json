@@ -1,0 +1,79 @@
+{
+  "title": "範例：Race to General Robotics（示範資料，時間碼為假設值）",
+  "source": { "type": "youtube", "id": "" },
+  "lines": [
+    {
+      "start": 0.0, "end": 4.0,
+      "en": "And the robots just — let's call it what it is — damn hard.",
+      "zh": "而機器人呢——說白了——就是超級難。",
+      "notes": [
+        {
+          "type": "chunk",
+          "match": "let's call it what it is",
+          "zhMatch": "說白了",
+          "title": "let's call it what it is",
+          "meaning": "說白了／直說吧",
+          "explain": "要講出一個不太好聽的事實之前，先用這句打預防針，口語很常見。",
+          "example": { "en": "Let's call it what it is — a failure.", "zh": "說白了，這就是失敗。" }
+        }
+      ]
+    },
+    {
+      "start": 4.2, "end": 8.0,
+      "en": "It's like one of the most complex pieces of hardware on the planet.",
+      "zh": "可說是地球上最複雜的硬體之一。",
+      "notes": [
+        {
+          "type": "pattern",
+          "match": "one of the most complex pieces of hardware",
+          "zhMatch": "最複雜的硬體之一",
+          "title": "one of the most + adj. + Ns",
+          "meaning": "最…的之一（N 用複數）",
+          "explain": "名詞要用複數：pieces 而不是 piece。hardware 不可數，要用 a piece of hardware 來計數。",
+          "example": { "en": "one of the most complex pieces of hardware", "zh": "最複雜的硬體之一" }
+        },
+        {
+          "type": "chunk",
+          "match": "on the planet",
+          "zhMatch": "地球上",
+          "title": "on the planet",
+          "meaning": "全世界、地球上（強調程度）",
+          "explain": "常接在最高級後面加強語氣，比 in the world 更口語。",
+          "example": { "en": "She's the best chef on the planet.", "zh": "她是全世界最強的主廚。" }
+        }
+      ]
+    },
+    {
+      "start": 8.5, "end": 12.0,
+      "en": "You need deep engineering that money can't buy.",
+      "zh": "你需要的是花錢也買不到的深厚工程實力。",
+      "notes": [
+        {
+          "type": "grammar",
+          "match": "that money can't buy",
+          "zhMatch": "花錢也買不到的",
+          "title": "N + that + S + V（關係子句）",
+          "meaning": "用子句修飾前面的名詞：「…的 N」",
+          "explain": "that 在子句裡當 buy 的受詞，所以也可以省略：deep engineering money can't buy。",
+          "example": { "en": "This is something money can't buy.", "zh": "這是錢買不到的東西。" }
+        }
+      ]
+    },
+    {
+      "start": 12.3, "end": 16.0,
+      "en": "And then on top of that, you need an AI recipe.",
+      "zh": "而且除此之外，你還需要一套 AI 配方。",
+      "notes": [
+        {
+          "type": "chunk",
+          "match": "on top of that",
+          "zhMatch": "除此之外",
+          "title": "on top of that",
+          "meaning": "除此之外、再加上",
+          "explain": "用來追加一件事，常帶有「而且還不只這樣」的語氣。",
+          "example": { "en": "It was raining, and on top of that, I lost my keys.", "zh": "下著雨，更糟的是我還弄丟了鑰匙。" }
+        }
+      ]
+    }
+  ]
+}
